@@ -1,0 +1,10 @@
+01:54:25 **** Incremental Build of configuration Debug for project 09_STM32F407_Multiple_LEDs_Binary_Counting ****
+make -j12 all 
+arm-none-eabi-size  09_STM32F407_Multiple_LEDs_Binary_Counting.elf 
+   text	   data	    bss	    dec	    hex	filename
+    812	      0	   1568	   2380	    94c	09_STM32F407_Multiple_LEDs_Binary_Counting.elf
+Finished building: default.size.stdout
+ 
+
+01:54:26 Build Finished. 0 errors, 0 warnings. (took 151ms)
+

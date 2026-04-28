@@ -1,0 +1,10 @@
+23:58:40 **** Incremental Build of configuration Debug for project GPIOs_STM32F407_LED_Toggle_Bitwise_XOR ****
+make -j12 all 
+arm-none-eabi-size  GPIOs_STM32F407_LED_Toggle_Bitwise_XOR.elf 
+   text	   data	    bss	    dec	    hex	filename
+    860	      0	   1568	   2428	    97c	GPIOs_STM32F407_LED_Toggle_Bitwise_XOR.elf
+Finished building: default.size.stdout
+ 
+
+23:58:40 Build Finished. 0 errors, 0 warnings. (took 147ms)
+

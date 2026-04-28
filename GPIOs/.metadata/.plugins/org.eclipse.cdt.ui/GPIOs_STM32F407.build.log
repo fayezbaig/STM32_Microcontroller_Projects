@@ -1,0 +1,9 @@
+18:47:27 **** Clean-only build of configuration Debug for project GPIOs_STM32F407 ****
+make -j12 clean 
+rm -rf ./Startup/startup_stm32f407vgtx.d ./Startup/startup_stm32f407vgtx.o
+rm -rf ./Src/main.cyclo ./Src/main.d ./Src/main.o ./Src/main.su ./Src/syscalls.cyclo ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.cyclo ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
+rm -rf GPIOs_STM32F407.elf GPIOs_STM32F407.list GPIOs_STM32F407.map default.size.stdout
+ 
+
+18:47:27 Build Finished. 0 errors, 0 warnings. (took 141ms)
+

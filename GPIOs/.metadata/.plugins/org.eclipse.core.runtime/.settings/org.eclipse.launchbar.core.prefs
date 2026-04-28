@@ -1,0 +1,17 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=win32
+configDescList=org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407_LED_Toggle_Bitwise_XOR,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407_LED_Blink (1),org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407_LED_Blink,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407_Two_LEDs,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:00_Hello_World_SWV,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:05_GPIOs_STM32F407_Button,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:06_GPIOs_STM32F407_Button_LED,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:07_STM32F407_Button_LED_Toggle,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:08_GPIOs_STM32F407_Multiple_LEDs,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:09_STM32F407_Multiple_LEDs_Binary_Counting,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:10_STM32F407_GPIOS_BSSR_LED,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:11_GPIO_STM32F407_Keypad_Matrix
+eclipse.preferences.version=1
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:00_Hello_World_SWV/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:00_Hello_World_SWV/activeLaunchTarget=null\:---
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:05_GPIOs_STM32F407_Button/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:08_GPIOs_STM32F407_Multiple_LEDs/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:10_STM32F407_GPIOS_BSSR_LED/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:11_GPIO_STM32F407_Keypad_Matrix/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407/activeLaunchTarget=null\:---
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407_LED_Blink\ (1)/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407_LED_Blink/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407_LED_Toggle_Bitwise_XOR/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:GPIOs_STM32F407_Two_LEDs/activeLaunchMode=run

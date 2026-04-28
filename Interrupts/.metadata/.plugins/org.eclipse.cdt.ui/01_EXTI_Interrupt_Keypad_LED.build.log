@@ -1,0 +1,10 @@
+15:17:40 **** Incremental Build of configuration Debug for project 01_EXTI_Interrupt_Keypad_LED ****
+make -j12 all 
+arm-none-eabi-size  01_EXTI_Interrupt_Keypad_LED.elf 
+   text	   data	    bss	    dec	    hex	filename
+   1052	      0	   1568	   2620	    a3c	01_EXTI_Interrupt_Keypad_LED.elf
+Finished building: default.size.stdout
+ 
+
+15:17:40 Build Finished. 0 errors, 0 warnings. (took 356ms)
+

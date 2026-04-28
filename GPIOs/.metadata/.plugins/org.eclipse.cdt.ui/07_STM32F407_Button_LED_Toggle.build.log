@@ -1,0 +1,10 @@
+23:27:34 **** Incremental Build of configuration Debug for project 07_STM32F407_Button_LED_Toggle ****
+make -j12 all 
+arm-none-eabi-size  07_STM32F407_Button_LED_Toggle.elf 
+   text	   data	    bss	    dec	    hex	filename
+    888	      0	   1568	   2456	    998	07_STM32F407_Button_LED_Toggle.elf
+Finished building: default.size.stdout
+ 
+
+23:27:35 Build Finished. 0 errors, 0 warnings. (took 145ms)
+

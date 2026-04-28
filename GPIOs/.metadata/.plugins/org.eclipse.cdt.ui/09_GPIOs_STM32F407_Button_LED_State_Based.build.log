@@ -1,0 +1,10 @@
+00:32:57 **** Incremental Build of configuration Debug for project 09_GPIOs_STM32F407_Button_LED_State_Based ****
+make -j12 all 
+arm-none-eabi-size  09_GPIOs_STM32F407_Button_LED_State_Based.elf 
+   text	   data	    bss	    dec	    hex	filename
+    832	      0	   1568	   2400	    960	09_GPIOs_STM32F407_Button_LED_State_Based.elf
+Finished building: default.size.stdout
+ 
+
+00:32:57 Build Finished. 0 errors, 0 warnings. (took 306ms)
+
