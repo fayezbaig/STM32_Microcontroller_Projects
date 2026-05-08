@@ -1,0 +1,31 @@
+!SESSION 2026-05-08 12:11:02.992 -----------------------------------------------
+eclipse.buildId=Version 2.1.1
+java.version=21.0.9
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-05-08 12:11:28.528
+!MESSAGE Log4j2 initialized with config file D:\Embedded Sofware\I2C\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-05-08 12:11:32.864
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-05-08 12:11:39.509
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-05-08 12:11:39.511
+!MESSAGE port: 
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:12:21.328
+!MESSAGE Indexed '00_I2C_MASTER_TRANSMITTER' (3 sources, 53 headers) in 1.55 sec: 1,954 declarations; 2,864 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.041%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:13:52.789
+!MESSAGE Indexed '01_I2C_MASTER_RECEIVER' (3 sources, 53 headers) in 0.572 sec: 1,954 declarations; 2,864 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.041%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:14:55.792
+!MESSAGE Indexed '03_EEPROM_WRITE_SYSTEM' (3 sources, 53 headers) in 0.579 sec: 1,954 declarations; 2,864 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.041%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:16:08.382
+!MESSAGE Indexed '04_I2C_INTERRUPT_BASED RECEIVER' (2 sources, 53 headers) in 0.487 sec: 1,952 declarations; 2,862 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.042%)

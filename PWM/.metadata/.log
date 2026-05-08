@@ -1,0 +1,31 @@
+!SESSION 2026-05-08 12:17:44.850 -----------------------------------------------
+eclipse.buildId=Version 2.1.1
+java.version=21.0.9
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-05-08 12:18:11.042
+!MESSAGE Log4j2 initialized with config file D:\Embedded Sofware\PWM\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-05-08 12:18:15.604
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-05-08 12:18:21.825
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-05-08 12:18:21.827
+!MESSAGE port: 
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:19:15.671
+!MESSAGE Indexed '00_PWM_LED_BRIGHTNESS_CONTROL' (3 sources, 53 headers) in 1.64 sec: 1,954 declarations; 2,864 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.041%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:20:29.324
+!MESSAGE Indexed '01_PWM_LED_FADE_EFFECT' (3 sources, 53 headers) in 0.679 sec: 1,954 declarations; 2,864 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.041%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:21:48.866
+!MESSAGE Indexed '02_PWM_SERVO_MOTOR_CONTROL' (3 sources, 53 headers) in 0.597 sec: 1,954 declarations; 2,864 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.041%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:23:13.956
+!MESSAGE Indexed '03_PWM_INTERRUPT_LED_BLINKER' (2 sources, 53 headers) in 0.475 sec: 1,952 declarations; 2,862 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.042%)

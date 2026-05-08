@@ -1,0 +1,17 @@
+12:41:12 **** Build of configuration Debug for project SMART_EMBEDDED_MONITORING_CONTROL _SYSTEM ****
+make -j12 all 
+arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"Startup/startup_stm32f407vgtx.d" -MT"Startup/startup_stm32f407vgtx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Startup/startup_stm32f407vgtx.o" "../Startup/startup_stm32f407vgtx.s"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/syscalls.d" -MT"Src/syscalls.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/syscalls.o"
+arm-none-eabi-gcc "../Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/sysmem.d" -MT"Src/sysmem.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/sysmem.o"
+arm-none-eabi-gcc -o "SMART_EMBEDDED_MONITORING_CONTROL _SYSTEM.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Embedded Sofware\Main Projects\Smart Embedded Monitoring and Control System\SMART_EMBEDDED_MONITORING_CONTROL _SYSTEM\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SMART_EMBEDDED_MONITORING_CONTROL _SYSTEM.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: SMART_EMBEDDED_MONITORING_CONTROL _SYSTEM.elf
+ 
+arm-none-eabi-size  SMART_EMBEDDED_MONITORING_CONTROL\ _SYSTEM.elf 
+arm-none-eabi-objdump -h -S SMART_EMBEDDED_MONITORING_CONTROL\ _SYSTEM.elf  > "SMART_EMBEDDED_MONITORING_CONTROL _SYSTEM.list"
+   text	   data	    bss	    dec	    hex	filename
+   1912	      0	   1576	   3488	    da0	SMART_EMBEDDED_MONITORING_CONTROL _SYSTEM.elf
+Finished building: default.size.stdout
+ 
+Finished building: SMART_EMBEDDED_MONITORING_CONTROL _SYSTEM.list
+ 

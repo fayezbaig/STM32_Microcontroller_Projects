@@ -1,0 +1,37 @@
+!SESSION 2026-05-08 11:59:41.699 -----------------------------------------------
+eclipse.buildId=Version 2.1.1
+java.version=21.0.9
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-05-08 12:00:12.970
+!MESSAGE Log4j2 initialized with config file D:\Embedded Sofware\UART\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-05-08 12:00:17.578
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-05-08 12:00:23.090
+!MESSAGE Executed PowerShell command powershell.exe -Command "Get-CimInstance -ClassName Win32_SerialPort | Select-Object -ExpandProperty DeviceID":
+
+
+!ENTRY com.st.stm32cube.ide.mpu.remote.serial 1 1 2026-05-08 12:00:23.091
+!MESSAGE port: 
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:01:41.775
+!MESSAGE Indexed '0_UART_LED_CONTROLLER' (3 sources, 53 headers) in 1.44 sec: 1,954 declarations; 2,864 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.041%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:05:51.244
+!MESSAGE Indexed '01' (3 sources, 53 headers) in 0.596 sec: 1,954 declarations; 2,864 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.041%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:06:36.589
+!MESSAGE Indexed '01_UART_Echo_System' (2 sources, 53 headers) in 0.635 sec: 1,952 declarations; 2,862 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:08:05.125
+!MESSAGE Indexed '02_UART_COMMAND_PARSER' (2 sources, 53 headers) in 0.638 sec: 1,952 declarations; 2,862 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:09:07.855
+!MESSAGE Indexed 'UART_Interrupt_Communication' (2 sources, 53 headers) in 0.515 sec: 1,952 declarations; 2,862 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-05-08 12:09:41.756
+!MESSAGE Indexed '03_UART_INTERRUPT_COMMUNICATION' (2 sources, 53 headers) in 0.488 sec: 1,952 declarations; 2,862 references; 0 unresolved inclusions; 1 syntax errors; 2 unresolved names (0.042%)

@@ -1,0 +1,2 @@
+../Src/main.c:25:5:main	1
+../Src/main.c:79:6:USART2_IRQHandler	2

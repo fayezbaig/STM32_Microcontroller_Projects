@@ -1,0 +1,20 @@
+12:16:51 **** Build of configuration Debug for project 04_I2C_INTERRUPT_BASED RECEIVER ****
+make -j12 all 
+arm-none-eabi-gcc -mcpu=cortex-m4 -g3 -DDEBUG -c -x assembler-with-cpp -MMD -MP -MF"Startup/startup_stm32f407vgtx.d" -MT"Startup/startup_stm32f407vgtx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Startup/startup_stm32f407vgtx.o" "../Startup/startup_stm32f407vgtx.s"
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/main.o"
+arm-none-eabi-gcc "../Src/syscalls.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/syscalls.d" -MT"Src/syscalls.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/syscalls.o"
+arm-none-eabi-gcc "../Src/sysmem.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/sysmem.d" -MT"Src/sysmem.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Src/sysmem.o"
+arm-none-eabi-gcc -o "04_I2C_INTERRUPT_BASED RECEIVER.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\Embedded Sofware\I2C\04_I2C_INTERRUPT_BASED RECEIVER\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="04_I2C_INTERRUPT_BASED RECEIVER.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: 04_I2C_INTERRUPT_BASED RECEIVER.elf
+ 
+arm-none-eabi-size  04_I2C_INTERRUPT_BASED\ RECEIVER.elf 
+arm-none-eabi-objdump -h -S 04_I2C_INTERRUPT_BASED\ RECEIVER.elf  > "04_I2C_INTERRUPT_BASED RECEIVER.list"
+   text	   data	    bss	    dec	    hex	filename
+    916	      0	   1568	   2484	    9b4	04_I2C_INTERRUPT_BASED RECEIVER.elf
+Finished building: default.size.stdout
+ 
+Finished building: 04_I2C_INTERRUPT_BASED RECEIVER.list
+ 
+
+12:16:52 Build Finished. 0 errors, 0 warnings. (took 1s.85ms)
+
