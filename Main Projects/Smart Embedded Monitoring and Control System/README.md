@@ -10,11 +10,11 @@ The system reads analog input from a potentiometer and sends the measured ADC va
 ## Key Features
 
 - **ADC:** Reads analog input from a potentiometer connected to PA1.
-- **PWM:** Uses TIM2 to control LED brightness based on the ADC reading.
+- **PWM:** Uses TIM2 Channel 1 on PA0 to control LED brightness based on the ADC reading.
 - **UART:** Transmits ADC readings to a PC terminal for monitoring and debugging.
 - **External Interrupts:** Uses a push button on PA7 to toggle the system's operating mode.
 - **Timer Interrupts:** Uses TIM2 interrupts to trigger periodic monitoring updates.
-- **Direct Register Access:** Configures STM32 peripherals through memory-mapped registers without relying on HAL peripheral APIs.
+- **Bare-Metal Programming:** Configures STM32 peripherals through memory-mapped registers without relying on HAL peripheral APIs.
 
 ## Technologies
 
