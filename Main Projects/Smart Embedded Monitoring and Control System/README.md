@@ -80,9 +80,4 @@ Mode: DIMMER | ADC: 2048 | Duty:  50 %
 ```
 3. Press the button again to switch the LED off.
 
-## Example UART Output
 
-```text
-ADC = 2048
-ADC = 3010
-ADC = 1024
