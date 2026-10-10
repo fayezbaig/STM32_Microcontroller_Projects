@@ -1,0 +1,129 @@
+# Room Temperature & Pressure Monitoring System via Wireless Communication Protocol
+
+*STM32F401/F411 + BMP280 + SSD1306 OLED + ESP32 BLE*
+
+This project measures room temperature and air pressure and shows them in three places: on a small
+OLED screen, on a PC, and wirelessly on a phone.
+
+Once per second, an STM32 "Black Pill" reads a BMP280 sensor over I2C. It then:
+- draws the temperature in large digits on the OLED, with the pressure below it,
+- prints a readable line to the PC over UART,
+- sends a checksummed data frame over a second UART to an ESP32.
+
+The ESP32 passes the values on over Bluetooth Low Energy using the standard Environmental Sensing
+service. Any BLE app, such as nRF Connect, shows the temperature directly, with no custom phone app needed.
+
+The STM32 firmware is fully bare metal: register-level drivers, no HAL, no CMSIS and no printf, and
+integer-only math. The ESP32 uses ESP-IDF with the Bluedroid stack, because its Bluetooth radio can
+only be driven through Espressif's own libraries.
+
+```
+BMP280 --I2C1--> STM32F4 (bare metal) --USART1--> PC terminal (text)
+                                      --USART2--> ESP32 --BLE--> phone
+                                      --I2C1----> SSD1306 OLED 128x64
+```
+
+## Files
+
+### stm32/ (bare metal, register level, no HAL/CMSIS, no printf)
+| File | Purpose |
+|---|---|
+| `Inc/stm32f4_reg.h` | Register map for RCC, GPIO, I2C1, USART1/2, SysTick |
+| `Inc/gpio.h`, `Src/gpio.c` | Pin configuration, on-board LED (PC13) |
+| `Inc/systick.h`, `Src/systick.c` | 1 ms tick, `delay_ms()`, `millis()` |
+| `Inc/i2c.h`, `Src/i2c.c` | Polled I2C1 master, ~380 kHz, timeouts, bus recovery |
+| `Inc/uart.h`, `Src/uart.c` | Polled USART1 (PC) and USART2 (ESP32), 115200 8N1 |
+| `Inc/bmp280.h`, `Src/bmp280.c` | BMP280 driver with integer compensation from the datasheet |
+| `Inc/oled.h`, `Src/oled.c` | SSD1306 frame-buffer driver with 5x7 font (scalable) |
+| `Inc/frame.h`, `Src/frame.c` | Number formatting and the `$BMP` frame sent to the ESP32 |
+| `Src/main.c` | Application: 1 Hz sampling, PC + ESP32 + OLED output, error recovery |
+| `Startup/startup_stm32f4.c` | Vector table, FPU enable, `.data`/`.bss` init, then calls `main()` |
+| `Startup/stm32f4_blackpill.ld` | Linker script (chip flash/RAM sizes) |
+| `Makefile` | `make` builds, `make flash` flashes via ST-Link |
+
+### esp32_ble_gateway/ (ESP-IDF v5.x, Bluedroid)
+| File | Purpose |
+|---|---|
+| `main/main.c` | NVS init, starts BLE and the UART receiver |
+| `main/uart_rx.c/.h` | UART2 line receiver (GPIO16 RX) |
+| `main/sensor_frame.c/.h` | Parses and checksum-verifies `$BMP` frames |
+| `main/ble_server.c/.h` | GATT server: Environmental Sensing Service 0x181A |
+| `CMakeLists.txt`, `main/CMakeLists.txt`, `sdkconfig.defaults` | ESP-IDF build files (BLE-only Bluedroid) |
+
+## Wiring (all 3.3 V, one common GND)
+
+| STM32 pin | Connects to |
+|---|---|
+| PB6 (I2C1_SCL) | BMP280 SCL, OLED SCL |
+| PB7 (I2C1_SDA) | BMP280 SDA, OLED SDA |
+| PA9 (USART1_TX) | USB-TTL adapter RX (to PC) |
+| PA10 (USART1_RX) | USB-TTL adapter TX (optional) |
+| PA2 (USART2_TX) | ESP32 GPIO16 (RX2) |
+| PA3 (USART2_RX) | ESP32 GPIO17 (TX2), optional |
+| 3V3 / GND | BMP280, OLED, ESP32 GND |
+
+- BMP280 SDO goes to GND, giving address **0x76**. If yours is 0x77, change `BMP280_I2C_ADDR`.
+- OLED address is **0x3C**. If yours is 0x3D, change `OLED_I2C_ADDR`.
+- The I2C bus needs pull-ups. Most breakout boards include them; if not, add 4.7 kΩ to 3.3 V on SDA and SCL.
+- **Do not** use a 5 V USB-TTL adapter on PA10.
+
+## UART protocol (STM32 to ESP32)
+
+```
+$BMP,<temp in 0.01 °C>,<pressure in Pa>*<XOR checksum>\r\n
+$BMP,2345,101325*5B        -> 23.45 °C, 1013.25 hPa
+```
+
+## How to run
+
+**You need:** `arm-none-eabi-gcc` + `make` (or STM32CubeIDE), an ST-Link or `dfu-util`,
+ESP-IDF v5.x, a USB-TTL adapter, and the nRF Connect app on your phone.
+
+### 1. Set your chip
+Open `stm32/Startup/stm32f4_blackpill.ld` and set `FLASH_SIZE` and `RAM_SIZE` to match the marking on the MCU:
+
+| Chip | `FLASH_SIZE` | `RAM_SIZE` |
+|---|---|---|
+| STM32F401CCU6 | 256K | 64K (default, works on all) |
+| STM32F401CEU6 | 512K | 96K |
+| STM32F411CEU6 | 512K | 128K |
+
+### 2. Build and flash the STM32
+```
+cd stm32
+make
+make flash
+```
+`make flash` uses an ST-Link. Without one, you can flash over USB-C instead:
+1. Unplug the USB-TTL adapter.
+2. Hold **BOOT0**, tap **NRST**, then release BOOT0.
+3. Run:
+```
+dfu-util -a 0 -s 0x08000000:leave -D build/firmware.bin
+```
+
+### 3. Check on the PC
+Connect the USB-TTL adapter (its RX to PA9, GND to GND) and open its COM port at **115200 baud**.
+You should see a line like this every second:
+```
+Temperature: 23.45 C   Pressure: 1013.25 hPa
+```
+The OLED shows the same values. Fix any "not found" errors before continuing.
+
+### 4. Flash the ESP32
+In the ESP-IDF terminal:
+```
+cd esp32_ble_gateway
+idf.py set-target esp32
+idf.py -p <PORT> flash monitor
+```
+Then connect **STM32 PA2 to ESP32 GPIO16** and **GND to GND**.
+
+### 5. View on the phone
+1. Open nRF Connect and connect to **BMP280-Room**.
+2. Open **Environmental Sensing**, then **Temperature**.
+3. Tap the notify icon. The value updates every second.
+
+## Notes
+- The clock is the 16 MHz HSI reset default. If you enable the PLL, update `SYSCLK_HZ`, `PCLK1_HZ` and `PCLK2_HZ` in `stm32f4_reg.h`.
+- **STM32CubeIDE users:** create an *Empty* project and replace its startup `.s` and `.ld` files with the ones in `stm32/Startup/`. Don't keep both startup files.
