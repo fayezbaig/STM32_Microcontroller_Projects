@@ -1,4 +1,4 @@
-# Room Temperature & Pressure Monitoring System via Wireless Communication Protocol
+# Room Temperature & Pressure Monitoring System via Wireless Communication Protocol and BMP280
 
 *STM32F401/F411 + BMP280 + SSD1306 OLED + ESP32 BLE*
 
