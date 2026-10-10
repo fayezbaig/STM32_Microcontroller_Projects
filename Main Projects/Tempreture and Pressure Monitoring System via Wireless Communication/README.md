@@ -1,21 +1,4 @@
-# Room Temperature & Pressure Monitoring System via Wireless Communication Protocol
-
-*STM32F401/F411 + BMP280 + SSD1306 OLED + ESP32 BLE*
-
-This project measures room temperature and air pressure and shows them in three places: on a small
-OLED screen, on a PC, and wirelessly on a phone.
-
-Once per second, an STM32 "Black Pill" reads a BMP280 sensor over I2C. It then:
-- draws the temperature in large digits on the OLED, with the pressure below it,
-- prints a readable line to the PC over UART,
-- sends a checksummed data frame over a second UART to an ESP32.
-
-The ESP32 passes the values on over Bluetooth Low Energy using the standard Environmental Sensing
-service. Any BLE app, such as nRF Connect, shows the temperature directly, with no custom phone app needed.
-
-The STM32 firmware is fully bare metal: register-level drivers, no HAL, no CMSIS and no printf, and
-integer-only math. The ESP32 uses ESP-IDF with the Bluedroid stack, because its Bluetooth radio can
-only be driven through Espressif's own libraries.
+# Temperature & Pressure Monitoring System via Wireless Communication Protocol and BMP280
 
 ```
 BMP280 --I2C1--> STM32F4 (bare metal) --USART1--> PC terminal (text)
@@ -37,9 +20,6 @@ BMP280 --I2C1--> STM32F4 (bare metal) --USART1--> PC terminal (text)
 | `Inc/oled.h`, `Src/oled.c` | SSD1306 frame-buffer driver with 5x7 font (scalable) |
 | `Inc/frame.h`, `Src/frame.c` | Number formatting and the `$BMP` frame sent to the ESP32 |
 | `Src/main.c` | Application: 1 Hz sampling, PC + ESP32 + OLED output, error recovery |
-| `Startup/startup_stm32f4.c` | Vector table, FPU enable, `.data`/`.bss` init, then calls `main()` |
-| `Startup/stm32f4_blackpill.ld` | Linker script (chip flash/RAM sizes) |
-| `Makefile` | `make` builds, `make flash` flashes via ST-Link |
 
 ### esp32_ble_gateway/ (ESP-IDF v5.x, Bluedroid)
 | File | Purpose |
@@ -74,56 +54,48 @@ $BMP,<temp in 0.01 °C>,<pressure in Pa>*<XOR checksum>\r\n
 $BMP,2345,101325*5B        -> 23.45 °C, 1013.25 hPa
 ```
 
-## How to run
+## Building
 
-**You need:** `arm-none-eabi-gcc` + `make` (or STM32CubeIDE), an ST-Link or `dfu-util`,
-ESP-IDF v5.x, a USB-TTL adapter, and the nRF Connect app on your phone.
+**STM32:**
+```
+cd stm32
+make            # build/firmware.elf, .bin, .hex
+make flash      # flash via ST-Link (needs st-flash)
+```
 
-### 1. Set your chip
-Open `stm32/Startup/stm32f4_blackpill.ld` and set `FLASH_SIZE` and `RAM_SIZE` to match the marking on the MCU:
+| File | Purpose |
+|---|---|
+| `Startup/startup_stm32f4.c` | Vector table for all 86 F401/F411 IRQs (weak handlers), FPU enable, `.data`/`.bss` init, then `main()` |
+| `Startup/stm32f4_blackpill.ld` | Linker script. Defaults to **F401CC (256 KB / 64 KB)**, which runs on every Black Pill |
+| `Makefile` | `arm-none-eabi-gcc`, hard-float, `-nostdlib` + `-lgcc` |
+
+**Set your chip variant** at the top of `stm32f4_blackpill.ld`, using the marking on the MCU:
 
 | Chip | `FLASH_SIZE` | `RAM_SIZE` |
 |---|---|---|
-| STM32F401CCU6 | 256K | 64K (default, works on all) |
+| STM32F401CCU6 | 256K | 64K (default) |
 | STM32F401CEU6 | 512K | 96K |
 | STM32F411CEU6 | 512K | 128K |
 
-### 2. Build and flash the STM32
-```
-cd stm32
-make
-make flash
-```
-`make flash` uses an ST-Link. Without one, you can flash over USB-C instead:
-1. Unplug the USB-TTL adapter.
-2. Hold **BOOT0**, tap **NRST**, then release BOOT0.
-3. Run:
-```
-dfu-util -a 0 -s 0x08000000:leave -D build/firmware.bin
-```
+Never set `RAM_SIZE` larger than the real chip has. The stack would start in RAM that doesn't exist,
+and the MCU would HardFault immediately.
 
-### 3. Check on the PC
-Connect the USB-TTL adapter (its RX to PA9, GND to GND) and open its COM port at **115200 baud**.
-You should see a line like this every second:
-```
-Temperature: 23.45 C   Pressure: 1013.25 hPa
-```
-The OLED shows the same values. Fix any "not found" errors before continuing.
+The clock is left at the 16 MHz HSI reset default (`SYSCLK_HZ` in `stm32f4_reg.h`). If you later
+enable the PLL, update `SYSCLK_HZ`, `PCLK1_HZ` and `PCLK2_HZ`.
 
-### 4. Flash the ESP32
-In the ESP-IDF terminal:
+**Using STM32CubeIDE instead of the Makefile:** create an *Empty* project, then replace its startup
+`.s` file with `startup_stm32f4.c` and its `.ld` file with `stm32f4_blackpill.ld`. Use one or the
+other; don't keep both startup files.
+
+**ESP32:**
 ```
 cd esp32_ble_gateway
 idf.py set-target esp32
-idf.py -p <PORT> flash monitor
+idf.py build flash monitor
 ```
-Then connect **STM32 PA2 to ESP32 GPIO16** and **GND to GND**.
 
-### 5. View on the phone
-1. Open nRF Connect and connect to **BMP280-Room**.
-2. Open **Environmental Sensing**, then **Temperature**.
-3. Tap the notify icon. The value updates every second.
-
-## Notes
-- The clock is the 16 MHz HSI reset default. If you enable the PLL, update `SYSCLK_HZ`, `PCLK1_HZ` and `PCLK2_HZ` in `stm32f4_reg.h`.
-- **STM32CubeIDE users:** create an *Empty* project and replace its startup `.s` and `.ld` files with the ones in `stm32/Startup/`. Don't keep both startup files.
+## Viewing on the phone
+1. Install **nRF Connect** (Android or iOS).
+2. Scan and connect to **BMP280-Room**.
+3. Open **Environmental Sensing**, then **Temperature**, and tap the notify icon (the down arrows).
+   The value updates every second, for example `23.45 °C`.
