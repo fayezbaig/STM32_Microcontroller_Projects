@@ -1,4 +1,25 @@
+
 # Temperature & Pressure Monitoring System via Wireless Communication Protocol and BMP280
+=======
+# Room Temperature & Pressure Monitoring System via Wireless Communication Protocol and BMP280
+
+*STM32F401/F411 + BMP280 + SSD1306 OLED + ESP32 BLE*
+
+This project measures room temperature and air pressure and shows them in three places: on a small
+OLED screen, on a PC, and wirelessly on a phone.
+
+Once per second, an STM32 "Black Pill" reads a BMP280 sensor over I2C. It then:
+- draws the temperature in large digits on the OLED, with the pressure below it,
+- prints a readable line to the PC over UART,
+- sends a checksummed data frame over a second UART to an ESP32.
+
+The ESP32 passes the values on over Bluetooth Low Energy using the standard Environmental Sensing
+service. Any BLE app, such as nRF Connect, shows the temperature directly, with no custom phone app needed.
+
+The STM32 firmware is fully bare metal: register-level drivers, no HAL, no CMSIS and no printf, and
+integer-only math. The ESP32 uses ESP-IDF with the Bluedroid stack, because its Bluetooth radio can
+only be driven through Espressif's own libraries.
+>>>>>>> c09aeb0a21e05e7893cb62bf871818fc97492bfc
 
 ```
 BMP280 --I2C1--> STM32F4 (bare metal) --USART1--> PC terminal (text)
@@ -94,8 +115,19 @@ idf.py set-target esp32
 idf.py build flash monitor
 ```
 
+
 ## Viewing on the phone
 1. Install **nRF Connect** (Android or iOS).
 2. Scan and connect to **BMP280-Room**.
 3. Open **Environmental Sensing**, then **Temperature**, and tap the notify icon (the down arrows).
    The value updates every second, for example `23.45 °C`.
+=======
+### 5. View on the phone
+1. Open nRF Connect and connect to **BMP280-Room**.
+2. Open **Environmental Sensing**, then **Temperature**.
+3. Tap the notify icon. The value updates every second.
+
+## Notes
+- The clock is the 16 MHz HSI reset default. If you enable the PLL, update `SYSCLK_HZ`, `PCLK1_HZ` and `PCLK2_HZ` in `stm32f4_reg.h`.
+- **STM32CubeIDE users:** create an *Empty* project and replace its startup `.s` and `.ld` files with the ones in `stm32/Startup/`. Don't keep both startup files.
+
