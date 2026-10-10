@@ -1,6 +1,6 @@
 
 # Temperature & Pressure Monitoring System via Wireless Communication Protocol and BMP280
-=======
+
 # Room Temperature & Pressure Monitoring System via Wireless Communication Protocol and BMP280
 
 *STM32F401/F411 + BMP280 + SSD1306 OLED + ESP32 BLE*
@@ -19,7 +19,6 @@ service. Any BLE app, such as nRF Connect, shows the temperature directly, with 
 The STM32 firmware is fully bare metal: register-level drivers, no HAL, no CMSIS and no printf, and
 integer-only math. The ESP32 uses ESP-IDF with the Bluedroid stack, because its Bluetooth radio can
 only be driven through Espressif's own libraries.
->>>>>>> c09aeb0a21e05e7893cb62bf871818fc97492bfc
 
 ```
 BMP280 --I2C1--> STM32F4 (bare metal) --USART1--> PC terminal (text)
