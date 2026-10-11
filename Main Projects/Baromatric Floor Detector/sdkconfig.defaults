@@ -1,0 +1,8 @@
+# FreeRTOS tick 1 kHz -> 1 ms resolution for vTaskDelayUntil / debounce
+CONFIG_FREERTOS_HZ=1000
+
+# HTTP server: room for the JSON reply
+CONFIG_HTTPD_MAX_REQ_HDR_LEN=1024
+
+# Logging
+CONFIG_LOG_DEFAULT_LEVEL_INFO=y

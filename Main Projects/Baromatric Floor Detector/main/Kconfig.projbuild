@@ -1,0 +1,37 @@
+menu "Floor Tracker"
+
+    config AP_SSID
+        string "WiFi network name"
+        default "FloorTracker"
+        help
+            Name of the WiFi network the ESP32 creates. Connect your phone to it
+            and open http://192.168.4.1
+
+    config AP_PASSWORD
+        string "WiFi password (min. 8 characters)"
+        default "floor1234"
+        help
+            WPA2 password. Shorter than 8 characters makes an open network.
+
+    config BMP280_SDA_GPIO
+        int "BMP280 SDA GPIO"
+        default 21
+
+    config BMP280_SCL_GPIO
+        int "BMP280 SCL GPIO"
+        default 22
+
+    config BMP280_I2C_ADDR
+        hex "BMP280 I2C address"
+        default 0x76
+        help
+            0x76 when SDO is tied to GND (most modules), 0x77 when tied to VCC.
+
+    config FLOOR_HEIGHT_CM
+        int "Height of one floor in cm"
+        range 200 600
+        default 300
+        help
+            Typical: 270-300 cm in homes, 300-400 cm in offices and university buildings.
+
+endmenu

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Floor Tracker</title>
+<style>
+  :root {
+    --bg: #f4f5f7; --card: #ffffff; --text: #16181d; --muted: #6b7280;
+    --line: #e5e7eb; --accent: #2563eb; --accent-soft: rgba(37, 99, 235, 0.12);
+    --up: #059669; --down: #dc2626; --warn: #d97706; --on-accent: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1115; --card: #181b21; --text: #eef0f3; --muted: #9aa1ad;
+      --line: #2a2f38; --accent: #60a5fa; --accent-soft: rgba(96, 165, 250, 0.15);
+      --up: #34d399; --down: #f87171; --warn: #fbbf24; --on-accent: #0b1220;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 480px; margin: 0 auto; padding: 16px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  h1 { font-size: 17px; font-weight: 600; margin: 0; }
+  .status { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--warn); }
+  .dot.ok { background: var(--up); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; margin-bottom: 12px; }
+  .hero { text-align: center; padding: 28px 18px 22px; }
+  .label { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .floor { font-size: 96px; font-weight: 700; line-height: 1; margin: 8px 0 6px; font-variant-numeric: tabular-nums; }
+  .motion { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 500;
+            padding: 6px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .motion.up { color: var(--up); background: color-mix(in srgb, var(--up) 14%, transparent); }
+  .motion.down { color: var(--down); background: color-mix(in srgb, var(--down) 14%, transparent); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .grid .card { margin: 0; padding: 14px; }
+  .value { font-size: 22px; font-weight: 600; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .unit { font-size: 14px; font-weight: 400; color: var(--muted); margin-left: 2px; }
+  canvas { width: 100%; height: 200px; display: block; }
+  button {
+    width: 100%; padding: 14px; font-size: 16px; font-weight: 600; border: 0; border-radius: 12px;
+    background: var(--accent); color: var(--on-accent); cursor: pointer;
+  }
+  button:active { transform: scale(0.99); }
+  .hint { font-size: 13px; color: var(--muted); text-align: center; margin: 10px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Floor Tracker</h1>
+    <div class="status"><span class="dot" id="dot"></span><span id="conn">Connecting…</span></div>
+  </header>
+
+  <section class="card hero">
+    <div class="label">Current floor</div>
+    <div class="floor" id="floor">–</div>
+    <div class="motion" id="motion">Waiting for data</div>
+  </section>
+
+  <section class="grid">
+    <div class="card"><div class="label">Height</div><div class="value" id="height">–</div></div>
+    <div class="card"><div class="label">Vertical speed</div><div class="value" id="speed">–</div></div>
+    <div class="card"><div class="label">Pressure</div><div class="value" id="pressure">–</div></div>
+    <div class="card"><div class="label">Temperature</div><div class="value" id="temp">–</div></div>
+  </section>
+
+  <section class="card">
+    <div class="label" style="margin-bottom:10px">Height · last 2 minutes</div>
+    <canvas id="chart"></canvas>
+  </section>
+
+  <button id="zero">Set ground floor here</button>
+  <p class="hint">Or press the BOOT button on the ESP32.</p>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const HISTORY_S = 120, POLL_MS = 500;
+const history = [];          // { t, h }
+let floorHeight = 3.0;
+
+function unit(v, u) { return `${v}<span class="unit">${u}</span>`; }
+
+function render(s) {
+  floorHeight = s.floorHeight || floorHeight;
+  $("floor").textContent = s.floor === 0 ? "G" : s.floor;
+  $("height").innerHTML = unit((s.height >= 0 ? "+" : "") + s.height.toFixed(2), "m");
+  $("speed").innerHTML = unit((s.speed >= 0 ? "+" : "") + s.speed.toFixed(2), "m/s");
+  $("pressure").innerHTML = unit(s.pressure.toFixed(1), "hPa");
+  $("temp").innerHTML = unit(s.temperature.toFixed(1), "°C");
+
+  const m = $("motion");
+  const arrow = s.motion.includes("up") ? "▲ " : s.motion.includes("down") ? "▼ " : "";
+  m.textContent = arrow + s.motion;
+  m.className = "motion" + (s.motion.includes("up") ? " up" : s.motion.includes("down") ? " down" : "");
+}
+
+function drawChart() {
+  const c = $("chart"), dpr = window.devicePixelRatio || 1;
+  const w = c.clientWidth, h = c.clientHeight;
+  c.width = w * dpr; c.height = h * dpr;
+  const g = c.getContext("2d");
+  g.scale(dpr, dpr);
+  const css = getComputedStyle(document.documentElement);
+  const col = (n) => css.getPropertyValue(n).trim();
+
+  if (history.length < 2) return;
+  const now = history[history.length - 1].t;
+  let lo = Math.min(...history.map(p => p.h)), hi = Math.max(...history.map(p => p.h));
+  lo = Math.floor(lo / floorHeight - 0.5) * floorHeight;
+  hi = Math.ceil(hi / floorHeight + 0.5) * floorHeight;
+  const pad = 28;
+  const x = (t) => pad + (1 - (now - t) / HISTORY_S) * (w - pad);
+  const y = (v) => h - 6 - (v - lo) / (hi - lo) * (h - 12);
+
+  // floor lines + labels
+  g.font = "11px -apple-system, sans-serif"; g.textBaseline = "middle";
+  for (let f = Math.round(lo / floorHeight); f <= Math.round(hi / floorHeight); f++) {
+    const yy = y(f * floorHeight);
+    g.strokeStyle = col("--line"); g.lineWidth = 1;
+    g.beginPath(); g.moveTo(pad, yy); g.lineTo(w, yy); g.stroke();
+    g.fillStyle = col("--muted"); g.fillText(f === 0 ? "G" : f, 6, yy);
+  }
+
+  // height line
+  g.strokeStyle = col("--accent"); g.lineWidth = 2; g.lineJoin = "round";
+  g.beginPath();
+  history.forEach((p, i) => (i ? g.lineTo(x(p.t), y(p.h)) : g.moveTo(x(p.t), y(p.h))));
+  g.stroke();
+}
+
+async function poll() {
+  try {
+    const r = await fetch("/api/state", { cache: "no-store" });
+    const s = await r.json();
+    $("dot").className = "dot" + (s.ok ? " ok" : "");
+    $("conn").textContent = s.ok ? "Live" : "Sensor error";
+    if (s.ok) {
+      render(s);
+      const t = performance.now() / 1000;
+      history.push({ t, h: s.height });
+      while (history.length && t - history[0].t > HISTORY_S) history.shift();
+      drawChart();
+    }
+  } catch (e) {
+    $("dot").className = "dot";
+    $("conn").textContent = "Disconnected";
+  }
+  setTimeout(poll, POLL_MS);
+}
+
+$("zero").addEventListener("click", async () => {
+  try {
+    await fetch("/api/zero", { method: "POST" });
+    history.length = 0;
+  } catch (e) { /* shown by the status indicator */ }
+});
+window.addEventListener("resize", drawChart);
+poll();
+</script>
+</body>
+</html>
